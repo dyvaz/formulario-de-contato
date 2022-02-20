@@ -2,7 +2,9 @@ body {
   margin-top: 100px;
 }
 .form-geral {
-  margin-left: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 input {
@@ -29,6 +31,7 @@ textarea {
   border: none;
   font-size: 1rem;
 }
+
 .botton-submit {
   font-size: 17px;
   border-radius: 5px;
