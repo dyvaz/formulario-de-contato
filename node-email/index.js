@@ -8,29 +8,48 @@ const port = 3000;
 app.use(express.static("../public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.set("view engine", "ejs");
+
+app.get("/", (req, res) => {
+  res.render("index");
+});
+
 app.post(
   "/api/contact",
   body("field-name").trim().notEmpty(),
-  body("field-message").trim().notEmpty(),
   body("field-email").trim().isEmail(),
+  body("field-message").trim().notEmpty(),
   (req, res) => {
     const errors = validationResult(req);
 
-    var allErrors = [];
+    let name = req.body["field-name"];
+    let email = req.body["field-email"];
+    let message = req.body["field-message"];
+
+    const allErrors = [];
     let i;
     for (i = 0; i < errors.errors.length; i++) {
-      let a = errors.errors[i].param;
-      allErrors.push(a);
-    }
-    if (i > 0) {
-      res.redirect("/index.html?error=" + allErrors);
-      res.end();
-      return;
+      allErrors.push(errors.errors[i].param);
+      switch (errors.errors[i].param) {
+        case "field-name":
+          name = errors.errors[i].value;
+          break;
+
+        case "field-email":
+          email = errors.errors[i].value;
+          break;
+
+        case "field-message":
+          message = errors.errors[i].value;
+          break;
+      }
     }
 
-    var name = req.body["field-name"];
-    var email = req.body["field-email"];
-    var message = req.body["field-message"];
+    const values = { name, email, message };
+    if (i > 0) {
+      res.render("index", { errors: allErrors, values });
+      return;
+    }
 
     const transport = nodemailer.createTransport({
       host: "localhost",
@@ -47,11 +66,11 @@ app.post(
 
     transport.sendMail(emailOptions, (error, info) => {
       if (error) {
-        res.redirect("/index.html?error=1");
+        res.render("index", { errors: allErrors });
       } else {
-        res.redirect("/index.html?error=0");
+        res.render("index", { errors: allErrors });
       }
-      res.end();
+      return;
     });
   }
 );

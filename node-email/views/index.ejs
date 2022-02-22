@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <title>Formulário de contato</title>
+    <meta charset="utf-8" />
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+  </head>
+
+  <body>
+    <div class="form-geral">
+      <div>
+        <% if (errors.includes("field-name")) { %>
+        <script>
+          alert("Houve um erro no preenchimento do campo NOME");
+        </script>
+        <% } %> <% if (errors.includes("field-email")) {%>
+        <script>
+          alert("Houve um erro no preenchimento do campo EMAIL");
+        </script>
+        <% } %> <% if (errors.includes("field-message")) { %>
+        <script>
+          alert("Houve um erro no preenchimento do campo MESSAGE");
+        </script>
+        <% } %>
+
+        <form action="/api/contact" method="post">
+          <div>
+            <label for="field-name">
+              <img src="/img/icon.png" alt="icone de perfil" />
+            </label>
+            <input
+              id="field-name"
+              type="text"
+              name="field-name"
+              placeholder=" Name"
+              value="<%= values.name %>"
+            />
+          </div>
+          <div>
+            <label for="field-email">
+              <img src="/img/email.png" alt="icone de email" />
+            </label>
+            <input
+              type="email"
+              id="field-email"
+              name="field-email"
+              placeholder="  Email"
+              value="<%= values.email %>"
+            />
+          </div>
+
+          <label for="field-message">
+            <img src="/img/escrita.png" alt="icone de escrita" />
+          </label>
+
+          <textarea
+            name="field-message"
+            id="field-message"
+            class="field-message"
+            placeholder=" Mensagem"
+            cols="39"
+            rows="5"
+          >
+<%= values.message %></textarea
+          >
+          <div>
+            <button class="botton-submit">Enviar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

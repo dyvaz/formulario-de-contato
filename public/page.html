@@ -44,12 +44,18 @@
           const qs = parseQueryString(window.location.search);
 
           if (qs.error === 0) {
-            alert("Sua mensagem foi enviada");
-          }
-          let arr = qs.error.split(",");
-
-          if (qs.error === 1) {
-            alert("Houve um erro");
+            alert("Sua mensagem foi enviada com sucesso");
+          } else {
+            let arr = qs.error.split(",");
+            if (arr.includes("field-name")) {
+              alert("Houve um erro no preenchimento do campo NOME");
+            }
+            if (arr.includes("field-email")) {
+              alert("Houve um erro no preenchimento do campo EMAIL");
+            }
+            if (arr.includes("field-message")) {
+              alert("Houve um erro no preenchimento do campo MESSAGE");
+            }
           }
         </script>
 
