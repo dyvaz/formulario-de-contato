@@ -11,7 +11,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
-  res.render("index");
+  res.render("index", {
+    errors: [],
+    values: { name: "", email: "", message: "" },
+  });
 });
 
 app.post(
@@ -66,9 +69,12 @@ app.post(
 
     transport.sendMail(emailOptions, (error, info) => {
       if (error) {
-        res.render("index", { errors: allErrors });
+        res.render("index", { errors: allErrors, values });
       } else {
-        res.render("index", { errors: allErrors });
+        res.render("index", {
+          errors: allErrors,
+          values: { name: "", email: "", message: "" },
+        });
       }
       return;
     });

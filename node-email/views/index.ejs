@@ -10,19 +10,12 @@
   <body>
     <div class="form-geral">
       <div>
-        <% if (errors.includes("field-name")) { %>
+        <% for(let i = 0; i < errors.length; i++) { %> <%
+        if(errors.includes(errors[i])){ %>
         <script>
-          alert("Houve um erro no preenchimento do campo NOME");
+          alert("There was an error filling in the <%=errors[i]%>");
         </script>
-        <% } %> <% if (errors.includes("field-email")) {%>
-        <script>
-          alert("Houve um erro no preenchimento do campo EMAIL");
-        </script>
-        <% } %> <% if (errors.includes("field-message")) { %>
-        <script>
-          alert("Houve um erro no preenchimento do campo MESSAGE");
-        </script>
-        <% } %>
+        <% } %> <% } %>
 
         <form action="/api/contact" method="post">
           <div>
