@@ -19,30 +19,30 @@ app.get("/", (req, res) => {
 
 app.post(
   "/api/contact",
-  body("field-name").trim().notEmpty(),
-  body("field-email").trim().isEmail(),
-  body("field-message").trim().notEmpty(),
+  body("field name").trim().notEmpty(),
+  body("field email").trim().isEmail(),
+  body("field message").trim().notEmpty(),
   (req, res) => {
     const errors = validationResult(req);
 
-    let name = req.body["field-name"];
-    let email = req.body["field-email"];
-    let message = req.body["field-message"];
+    let name = req.body["field name"];
+    let email = req.body["field email"];
+    let message = req.body["field message"];
 
     const allErrors = [];
     let i;
     for (i = 0; i < errors.errors.length; i++) {
       allErrors.push(errors.errors[i].param);
       switch (errors.errors[i].param) {
-        case "field-name":
+        case "field name":
           name = errors.errors[i].value;
           break;
 
-        case "field-email":
+        case "field email":
           email = errors.errors[i].value;
           break;
 
-        case "field-message":
+        case "field message":
           message = errors.errors[i].value;
           break;
       }
