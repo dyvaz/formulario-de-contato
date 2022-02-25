@@ -13,13 +13,19 @@
     <div>
       <div id="caixa-erro">
         <% for(let i = 0; i < errors.length; i++) { %>
-
         <div id="error-message">
+          <img src="/img/error.png" alt="icone de error" id="icone-error">
           <p>There was an error filling in the <%=errors[i].replace('-', ' '); %></p>
         </div>
-
         <% } %>
       </div>
+      <%if(errors.length == 0){%>
+      <div id="sucesso-message">
+        <img src="/img/sucesso.png" alt="icone de sucesso" id="icone-sucesso">
+        <p>Message sent successfully, thanks for contacting us</p>
+      </div>
+      <% } %>
+
 
       <form action="/api/contact" method="post">
         <div>
