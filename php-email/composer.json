@@ -1,0 +1,17 @@
+{
+    "name": "dyvaz/formulario-in-php",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Dyanna Azevedo",
+            "email": "dyvazevedo@gmail.com"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^6.6"
+
+
+    }
+    
+    
+}

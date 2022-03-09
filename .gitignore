@@ -1,7 +1,9 @@
 mysql/
+vendor/
+composer.phar
 
-# Created by https://www.toptal.com/developers/gitignore/api/linux,windows,macos,node,visualstudiocode
-# Edit at https://www.toptal.com/developers/gitignore?templates=linux,windows,macos,node,visualstudiocode
+# Created by https://www.toptal.com/developers/gitignore/api/linux,windows,macos,node,visualstudiocode,php
+# Edit at https://www.toptal.com/developers/gitignore?templates=linux,windows,macos,node,visualstudiocode,php
 
 ### Linux ###
 *~
@@ -187,6 +189,8 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
+#!! ERROR: php is undefined. Use list command to see defined gitignore types !!#
+
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json
@@ -234,4 +238,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.toptal.com/developers/gitignore/api/linux,windows,macos,node,visualstudiocode
+# End of https://www.toptal.com/developers/gitignore/api/linux,windows,macos,node,visualstudiocode,php
