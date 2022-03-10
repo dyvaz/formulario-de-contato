@@ -4,16 +4,41 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-require "vendor/autoload.php";
+require 'vendor/autoload.php';
 
-$mail = new PHPMailer(true);
+$nome = $_POST['field-nome'];
+$email = trim($_POST['field-email']);
+$message = $_POST['field-message'];
 
-$mail->SMTPDebug = SMTP::DEBUG_SERVER;
-$mail->isSMTP();
-$mail->Host       = 'localhost';
-$mail->Port       = 1025;
+$from = $email;
+$to = "dy@dyvaz.com";
+$subject = "testando email php no mailhog";
+
+try {
+    $mail = new PHPMailer(true);
+
+    // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+    // mostra oq ta acontecendo
+
+    $mail->isSMTP();
+    $mail->Host       = "localhost";
+    $mail->Port       = 1025;
 
 
+    $mail->setFrom($from, $name);
+    $mail->addAddress($to);
+
+    $mail->Subject = 'Testando Mailhog -php';
+    $mail->Body = $message;
+
+
+    $mail->send();
+
+    echo 'E-mail enviado com sucesso!';
+} catch (Exception $e) {
+
+    echo "Erro: E-mail não enviado!";
+}
 
 ?>
 
@@ -53,7 +78,7 @@ $mail->Port       = 1025;
 
                 <textarea name="field-message" id="field-message" class="field-message" placeholder=" Mensagem" cols="39" rows="5"></textarea>
                 <div>
-                    <button class="botton-submit">Enviar</button>
+                    <button name="botton-submit" class="botton-submit">Enviar</button>
                 </div>
             </form>
         </div>
