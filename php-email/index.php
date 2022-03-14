@@ -8,20 +8,32 @@ use PHPMailer\PHPMailer\Exception;
 require 'vendor/autoload.php';
 
 
-$name = $_POST['field-name'];
-$email = trim($_POST['field-email']);
-$message = $_POST['field-message'];
+$name = isset($_POST['field-name']) ? $_POST['field-name'] : '';
+$email = isset($_POST['field-email']) ? $_POST['field-email'] : '';
+$message = isset($_POST['field-message']) ? $_POST['field-message'] : '';
+
+
+$erro = false;
+
+if ((!isset($email) || !filter_var(trim($email), FILTER_VALIDATE_EMAIL)) && $erro == false) {
+    echo '   Envie um email válido.  ';
+    $erro = true;
+}
+
+if ((!filter_var(trim($name)) || !filter_var(trim($message))) && $erro == false) {
+    echo ' campos vazios  ';
+    $erro = true;
+}
 
 $from = $email;
 $to = "dy@dyvaz.com";
 $subject = "testando email php no mailhog";
 
+
 try {
     $mail = new PHPMailer(true);
 
-    $mail->SMTPDebug = SMTP::DEBUG_SERVER;
-
-
+    //$mail->SMTPDebug = SMTP::DEBUG_SERVER;
     $mail->isSMTP();
     $mail->Host       = "localhost";
     $mail->Port       = 1025;
@@ -35,13 +47,19 @@ try {
 
 
     $mail->Send();
+    if ($erro) {
+        echo $erro;
+    } else {
+        header('Location: index.php');
+        exit();
+    }
 
-
-    echo 'E-mail enviado com sucesso!';
+    //echo 'E-mail enviado com sucesso!';
 } catch (Exception $e) {
 
-    echo "Erro: E-mail não enviado!";
+    // echo "Erro: E-mail não enviado!";
 }
+
 
 ?>
 
@@ -67,20 +85,20 @@ try {
                     <label for="field-name">
                         <img src="img/icon.png" alt="icone de perfil" />
                     </label>
-                    <input id="field-name" type="text" name="field-name" placeholder="  Name" />
+                    <input id="field-name" value="<?php echo $_POST['field-name'] ?>" type="text" name="field-name" placeholder="  Name" />
                 </div>
                 <div>
                     <label for="field-email">
                         <img src="img/email.png" alt="icone de email" />
                     </label>
-                    <input type="email" id="field-email" name="field-email" placeholder="  Email" />
+                    <input id="field-email" value="<?php echo $_POST['field-email'] ?>" type="text" name="field-email" placeholder="  Email" />
                 </div>
 
                 <label for="field-message">
                     <img src="img/escrita.png" alt="icone de escrita" />
                 </label>
 
-                <textarea name="field-message" id="field-message" class="field-message" placeholder=" Mensagem" cols="39" rows="5"></textarea>
+                <textarea id="field-message" value="<?php echo $_POST['field-message'] ?>" class="field-message" name="field-message" placeholder=" Mensagem" cols="39" rows="5"></textarea>
                 <div>
                     <button name="botton-submit" id="botton-submit" class="botton-submit">Enviar</button>
                 </div>
