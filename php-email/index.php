@@ -4,67 +4,57 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-
 require 'vendor/autoload.php';
 
+$requestMethod = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
 
-$name = isset($_POST['field-name']) ? $_POST['field-name'] : '';
-$email = isset($_POST['field-email']) ? $_POST['field-email'] : '';
-$message = isset($_POST['field-message']) ? $_POST['field-message'] : '';
+if ($requestMethod === 'POST') {
 
+    //verificaçao da existencia das chaves, criando uma string vazia se nao existir
+    $name = isset($_POST['field-name']) ? $_POST['field-name'] : '';
+    $email = isset($_POST['field-email']) ? $_POST['field-email'] : '';
+    $message = isset($_POST['field-message']) ? $_POST['field-message'] : '';
 
-$erro = false;
+    $erro = "";
+    $imprimir = '';
 
-if ((!isset($email) || !filter_var(trim($email), FILTER_VALIDATE_EMAIL)) && $erro == false) {
-    echo '   Envie um email válido.  ';
-    $erro = true;
-}
-
-if ((!filter_var(trim($name)) || !filter_var(trim($message))) && $erro == false) {
-    echo ' campos vazios  ';
-    $erro = true;
-}
-
-$from = $email;
-$to = "dy@dyvaz.com";
-$subject = "testando email php no mailhog";
-
-
-try {
-    $mail = new PHPMailer(true);
-
-    //$mail->SMTPDebug = SMTP::DEBUG_SERVER;
-    $mail->isSMTP();
-    $mail->Host       = "localhost";
-    $mail->Port       = 1025;
-    $mail->SMTPAuth = true;
-
-    $mail->setFrom($from, $name);
-    $mail->addAddress($to);
-
-    $mail->Subject = 'Testando Mailhog -php';
-    $mail->Body = $message;
-
-
-    $mail->Send();
-    if ($erro) {
-        echo $erro;
-    } else {
-        header('Location: index.php');
-        exit();
+    if (!filter_var(trim($name)) && empty($erro)) {
+        $erro = "name";
+        $imprimir = "preencha um nome valido ";
     }
 
-    //echo 'E-mail enviado com sucesso!';
-} catch (Exception $e) {
+    if ((!isset($email) || !filter_var(trim($email), FILTER_VALIDATE_EMAIL)) &&  empty($erro)) {
+        $erro = "email";
+        $imprimir = "preencha um email valido ";
+    }
 
-    // echo "Erro: E-mail não enviado!";
+    if (!filter_var(trim($message)) && empty($erro)) {
+        $erro = "message";
+        $imprimir = "preencha uma mensagem valida";
+    }
+
+    if ($erro == "") {
+        $from = $email;
+        $to = "dy@dyvaz.com";
+        $subject = "testando email php no mailhog";
+
+        $mail = new PHPMailer(true);
+        $mail->isSMTP();
+        $mail->Host       = "localhost";
+        $mail->Port       = 1025;
+        $mail->SMTPAuth = true;
+        $mail->setFrom($from, $name);
+        $mail->addAddress($to);
+        $mail->Subject = 'Testando Mailhog -php';
+        $mail->Body = $message;
+
+        $mail->Send();
+
+        header('Location: /');
+        exit();
+    }
 }
-
-
 ?>
-
-
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -79,6 +69,16 @@ try {
 <body>
     <div class="form-geral">
         <div>
+
+            <div class="caixa-erro">
+                <?php if (isset($imprimir) && $imprimir !== '') { ?>
+                    <img src="/img/error.png" alt="icone de error" id="icone-error">
+                    <div class="error-message"><?php echo $imprimir; ?></div>
+                <?php } else { ?>
+                    <img src="/img/sucesso.png" alt="icone de sucesso" id="icone-sucesso">
+                    <div class="sucesso-message"><?php echo 'E-mail enviado com sucesso!'; ?></div>
+                <?php } ?>
+            </div>
 
             <form action="/" method="post">
                 <div>
