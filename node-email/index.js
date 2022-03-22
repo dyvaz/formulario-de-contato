@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const express = require("express");
 const { body, validationResult } = require("express-validator");
 const app = express();
-const port = 3000;
+const port = 3001;
 
 app.use(express.static("../public"));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
 });
 
 app.post(
-  "/api/contact",
+  "/",
   body("field-name").trim().notEmpty(),
   body("field-email").trim().isEmail(),
   body("field-message").trim().notEmpty(),
