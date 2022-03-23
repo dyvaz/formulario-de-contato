@@ -8,16 +8,9 @@ Depois da verificaçao da existência das variaveis e seus valores corretos inci
 
 ### ainda precisa ser feito:
 
-- [x]fazer a mensagem de falha/sucesso aparecer no momento correto.
-- [x]estilizar as mensagens de falha/sucesso
-- [x] Deixar envolta dos campos vermelhos
-- [x] mostrar todos os erros?
-- [x] colocar os erros em ingles
-- [ ] nao aparecer a mensagem de sucesso antes de enviar
+- [ ] Deixar a logica do node no mesmo padrão que o em php
 
-### Pré-requiaitos
-
-> Tecnologias utilizadas:
+### Tecnologias utilizadas:
 
 [Node.js](https://nodejs.org/en/),
 [Docker-compose](https://docs.docker.com/compose/install/),
@@ -42,9 +35,10 @@ $ docker-compose up
 # Para para o Docker:
 $ docke-compose down
 
-# O formulario esrtara em http://localhost:3000
+# O formulario em php esrtara em http://localhost:3000
+# O formulario em node esrtara em http://localhost:3001
 # E o MailHog em http://0.0.0.0:8025/
 
 ```
 
-| <img src="https://avatars.githubusercontent.com/dyvaz" width=115><br><sub>Dyanna Azevedo</sub> |
+<img src="https://avatars.githubusercontent.com/dyvaz" width=115><br> <sub>Dyanna Azevedo</sub>

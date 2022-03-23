@@ -2,37 +2,34 @@
 
 use PHPMailer\PHPMailer\PHPMailer;
 
-
 require 'vendor/autoload.php';
 
 $requestMethod = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
 
+$success = isset($_GET['success']) ? ($_GET['success'] === '1') : false;
+
 if ($requestMethod === 'POST') {
-
     //verificaçao da existencia das chaves, criando uma string vazia se nao existir
-    $name = isset($_POST['field-name']) ? $_POST['field-name'] : '';
-    $email = isset($_POST['field-email']) ? $_POST['field-email'] : '';
-    $message = isset($_POST['field-message']) ? $_POST['field-message'] : '';
+    $name = isset($_POST['field-name']) ? trim($_POST['field-name']) : '';
+    $email = isset($_POST['field-email']) ? trim($_POST['field-email']) : '';
+    $message = isset($_POST['field-message']) ? trim($_POST['field-message']) : '';
 
-    $erro = [];
+    $errors = [];
 
-    if (!filter_var(trim($name))) {
-        array_push($erro, "name");
+    if ($name === "") {
+        // $errors[] é o mesmo que usar array_push($errors, '...') porém sem fazer uma chamada de função
+        $errors['name'] = 'There was an error filling in the name';
     }
 
-    if ((!isset($email) || !filter_var(trim($email), FILTER_VALIDATE_EMAIL))) {
-        array_push($erro, "email");
+    if (!filter_var(trim($email), FILTER_VALIDATE_EMAIL)) {
+        $errors['email'] = 'There was an error filling in the email';
     }
 
-    if (!filter_var(trim($message))) {
-        array_push($erro, "message");
-    }
-    if (filter_var(trim($name) && filter_var(trim($email), FILTER_VALIDATE_EMAIL)) && filter_var(trim($message))) {
-        echo $erro;
+    if ($message === "") {
+        $errors['message'] = 'There was an error filling in the message';
     }
 
-    if (empty($erro)) {
-
+    if (empty($errors)) {
         $from = $email;
         $to = "dy@dyvaz.com";
         $subject = "testando email php no mailhog";
@@ -47,18 +44,15 @@ if ($requestMethod === 'POST') {
         $mail->Subject = 'Testando Mailhog -php';
         $mail->Body = $message;
 
-
         try {
             $mail->send();
-
-            header('Location: /');
+            header("Location: /?success=1");
             exit();
         } catch (Exception $e) {
-            echo 'Message could not be sent. Mailer Error: ', $mail->ErrorInfo;
+            $errors[] = 'We had a server error, please try again later';
         }
     }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -76,28 +70,26 @@ if ($requestMethod === 'POST') {
         <div>
             <div>
                 <div class="box-error">
-                    <?php if (isset($erro) && !empty($erro)) { ?>
-                        <?php for ($i = 0; $i < sizeof($erro); $i++) { ?>
-                            <div class="error-message">
-                                <img src="/img/error.png" alt="icone de error" id="icone-error">
-                                <p>There was an error filling in the <?php echo "field $erro[$i]" ?>
-                                </p>
-                            </div>
-                        <?php } ?>
+                    <?php foreach ($errors as $value) { ?>
+                        <div class="error-message">
+                            <img src="/img/error.png" alt="icone de error" id="icone-error">
+                            <p><?php echo $value; ?></p>
+                        </div>
+                    <?php } ?>
+                    <?php if ($success) { ?>
+                        <div class="sucesso-message">
+                            <img src="/img/sucesso.png" alt="icone de sucesso" id="icone-sucesso">
+                            <p>Message sent successfully, thanks for contacting us</p>
+                        </div>
+                    <?php } ?>
                 </div>
-            <?php } else { ?>
-                <div class="sucesso-message">
-                    <img src="/img/sucesso.png" alt="icone de sucesso" id="icone-sucesso">
-                    <p>Message sent successfully, thanks for contacting us</p>
-                </div>
-            <?php } ?>
             </div>
             <form action="/" method="post">
                 <div>
                     <label for="field-name">
                         <img src="img/icon.png" alt="icone de perfil" />
                     </label>
-                    <input id="field-name" value="<?php echo $_POST['field-name'] ?>" type="text" name="field-name" placeholder="  Name" <?php if (in_array("name", $erro)) { ?> class="alert" <?php } ?> />
+                    <input id="field-name" value="<?php if (!empty($errors)) echo $_POST['field-name'] ?>" type="text" name="field-name" placeholder="  Name" <?php if (isset($errors['name'])) { ?> class="alert" <?php } ?> />
 
 
                 </div>
@@ -105,14 +97,14 @@ if ($requestMethod === 'POST') {
                     <label for=" field-email">
                         <img src="img/email.png" alt="icone de email" />
                     </label>
-                    <input id="field-email" value="<?php echo $_POST['field-email'] ?>" type="text" name="field-email" placeholder="  Email" <?php if (in_array("email", $erro)) { ?> class="alert" <?php } ?> />
+                    <input id="field-email" value="<?php if (!empty($errors)) echo $_POST['field-email'] ?>" type="text" name="field-email" placeholder="  Email" <?php if (isset($errors['email'])) { ?> class="alert" <?php } ?> />
                 </div>
 
                 <label for="field-message">
                     <img src="img/escrita.png" alt="icone de escrita" />
                 </label>
 
-                <textarea id="field-message" name="field-message" placeholder=" Mensagem" cols="39" rows="5" <?php if (in_array("message", $erro)) { ?> class="alert" <?php } ?>><?php echo $_POST["field-message"] ?></textarea>
+                <textarea id="field-message" name="field-message" placeholder=" Mensagem" cols="39" rows="5" <?php if (isset($errors['message'])) { ?> class="alert" <?php } ?>><?php if (!empty($errors)) echo $_POST["field-message"] ?></textarea>
                 <div>
                     <button name="botton-submit" id="botton-submit" class="botton-submit">Send</button>
                 </div>
