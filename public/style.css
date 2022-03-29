@@ -52,12 +52,12 @@ textarea {
   font-size: 18px;
   padding-top: 3px;
   padding-bottom: 3px;
-  border-bottom: 7px solid rgb(255, 255, 255);
+  background-color: rgb(223, 155, 155);
+  margin-bottom: 10px;
+  border-radius: 10px;
 }
 
 #caixa-erro {
-  text-align: left;
-  background-color: rgb(223, 155, 155);
   margin-bottom: 40px;
 }
 
@@ -85,4 +85,5 @@ textarea {
   text-align: center;
   background-color: rgb(197, 236, 197);
   margin-bottom: 40px;
+  border-radius: 10px;
 }

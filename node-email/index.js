@@ -4,7 +4,7 @@ const express = require("express");
 const { body, validationResult } = require("express-validator");
 const app = express();
 const port = 3001;
-
+let errorServ = false;
 app.use(express.static("../public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -13,7 +13,7 @@ app.set("view engine", "ejs");
 app.get("/", (req, res) => {
   res.render("index", {
     errors: [],
-    values: { name: "", email: "", message: "" },
+    values: { name: "", email: "", message: "", errorServ },
   });
 });
 
@@ -33,7 +33,6 @@ app.post(
     let i;
     for (i = 0; i < errors.errors.length; i++) {
       allErrors.push(errors.errors[i].param);
-
       switch (errors.errors[i].param) {
         case "field-name":
           name = errors.errors[i].value;
@@ -49,17 +48,16 @@ app.post(
           break;
       }
     }
-
     const values = { name, email, message };
+
     if (i > 0) {
-      res.render("index", { errors: allErrors, values });
+      res.render("index", { errors: allErrors, values, errorServ });
       return;
     }
 
     const transport = nodemailer.createTransport({
       host: "localhost",
       port: 1025,
-      secure: false,
     });
 
     const emailOptions = {
@@ -71,13 +69,19 @@ app.post(
 
     transport.sendMail(emailOptions, (error, info) => {
       if (error) {
-        res.render("index", { errors: allErrors, values });
-      } else {
         res.render("index", {
           errors: allErrors,
+          values,
+          errorServ: true,
+        });
+      } else {
+        res.render("index", {
+          errors: [],
           values: { name: "", email: "", message: "" },
+          errorServ: false,
         });
       }
+
       return;
     });
   }
