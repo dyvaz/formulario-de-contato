@@ -2,18 +2,23 @@ const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
 const express = require("express");
 const { body, validationResult } = require("express-validator");
+const res = require("express/lib/response");
+const LeWindows = require("nodemailer/lib/mime-node/le-windows");
 const app = express();
 const port = 3001;
-let errorServ = false;
 app.use(express.static("../public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set("view engine", "ejs");
 
-app.get("/", (req, res) => {
+app.get("/", (req, res, next) => {
+  let test = req.query.success === "1" ? true : false;
+  //tava dando erro pq tava testando um numero e uma string
   res.render("index", {
     errors: [],
-    values: { name: "", email: "", message: "", errorServ },
+    values: { name: "", email: "", message: "" },
+    errorServ: false,
+    sucesso: req.query.success === "1" ? true : false,
   });
 });
 
@@ -22,8 +27,11 @@ app.post(
   body("field-name").trim().notEmpty(),
   body("field-email").trim().isEmail(),
   body("field-message").trim().notEmpty(),
-  (req, res) => {
+  (req, res, next) => {
     const errors = validationResult(req);
+
+    let errorServ = false;
+    let sucesso = req.query.success === "1" ? true : false;
 
     let name = req.body["field-name"];
     let email = req.body["field-email"];
@@ -51,7 +59,7 @@ app.post(
     const values = { name, email, message };
 
     if (i > 0) {
-      res.render("index", { errors: allErrors, values, errorServ });
+      res.render("index", { errors: allErrors, values, errorServ, sucesso });
       return;
     }
 
@@ -73,15 +81,17 @@ app.post(
           errors: allErrors,
           values,
           errorServ: true,
+          sucesso: false,
         });
       } else {
-        res.render("index", {
+        res.redirect("/?success=1");
+        res.renderedView("index", {
           errors: [],
           values: { name: "", email: "", message: "" },
           errorServ: false,
+          sucesso: true,
         });
       }
-
       return;
     });
   }
