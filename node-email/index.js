@@ -12,8 +12,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
 app.get("/", (req, res, next) => {
-  let test = req.query.success === "1" ? true : false;
-  //tava dando erro pq tava testando um numero e uma string
   res.render("index", {
     errors: [],
     values: { name: "", email: "", message: "" },

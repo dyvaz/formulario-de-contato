@@ -61,6 +61,10 @@ textarea {
   margin-bottom: 40px;
 }
 
+#caixa-erro {
+  margin-top: -40px;
+}
+
 #icone-error {
   background-color: rgb(206, 57, 57);
   border-radius: 50px;
@@ -69,7 +73,7 @@ textarea {
   margin-right: 15px;
 }
 #icone-sucesso {
-  margin-top: 16px;
+  margin-top: 20px;
   margin-left: 10px;
   background-color: rgb(72, 148, 65);
   border-radius: 50px;
