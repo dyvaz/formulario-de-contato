@@ -2,8 +2,6 @@ const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
 const express = require("express");
 const { body, validationResult } = require("express-validator");
-const res = require("express/lib/response");
-const LeWindows = require("nodemailer/lib/mime-node/le-windows");
 const app = express();
 const port = 3001;
 app.use(express.static("../public"));
@@ -35,22 +33,25 @@ app.post(
     let email = req.body["field-email"];
     let message = req.body["field-message"];
 
-    const allErrors = [];
+    let allErrors = [];
     let i;
     for (i = 0; i < errors.errors.length; i++) {
-      allErrors.push(errors.errors[i].param);
+      //allErrors.push(errors.errors[i].param);
+      console.log(allErrors);
       switch (errors.errors[i].param) {
         case "field-name":
           name = errors.errors[i].value;
-
+          allErrors.push("There was an error filling in the name");
           break;
 
         case "field-email":
           email = errors.errors[i].value;
+          allErrors.push("There was an error filling in the email");
           break;
 
         case "field-message":
           message = errors.errors[i].value;
+          allErrors.push("There was an error filling in the message");
           break;
       }
     }
@@ -67,7 +68,7 @@ app.post(
     });
 
     const emailOptions = {
-      from: email,
+      from: name + " " + email,
       to: "dy@dyvaz.com",
       subject: "Testando Mailhog",
       text: message,
@@ -75,6 +76,7 @@ app.post(
 
     transport.sendMail(emailOptions, (error, info) => {
       if (error) {
+        allErrors = ["We had a server error, please try again later"];
         res.render("index", {
           errors: allErrors,
           values,

@@ -89,7 +89,7 @@ if ($requestMethod === 'POST') {
                     <label for="field-name">
                         <img src="img/icon.png" alt="icone de perfil" />
                     </label>
-                    <input id="field-name" value="<?php if (!empty($errors)) echo $_POST['field-name'] ?>" type="text" name="field-name" placeholder="  Name" <?php if (isset($errors['name'])) { ?> class="alert" <?php } ?> />
+                    <input id="field-name" value="<?php if (!empty($name)) echo $_POST['field-name'] ?>" type="text" name="field-name" placeholder="  Name" <?php if (isset($errors['name'])) { ?> class="alert" <?php } ?> />
 
 
                 </div>
@@ -97,14 +97,14 @@ if ($requestMethod === 'POST') {
                     <label for=" field-email">
                         <img src="img/email.png" alt="icone de email" />
                     </label>
-                    <input id="field-email" value="<?php if (!empty($errors)) echo $_POST['field-email'] ?>" type="text" name="field-email" placeholder="  Email" <?php if (isset($errors['email'])) { ?> class="alert" <?php } ?> />
+                    <input id="field-email" value="<?php if (!empty($email)) echo $_POST['field-email'] ?>" type="email" name="field-email" placeholder="  Email" <?php if (isset($errors['email'])) { ?> class="alert" <?php } ?> />
                 </div>
 
                 <label for="field-message">
                     <img src="img/escrita.png" alt="icone de escrita" />
                 </label>
 
-                <textarea id="field-message" name="field-message" placeholder=" Mensagem" cols="39" rows="5" <?php if (isset($errors['message'])) { ?> class="alert" <?php } ?>><?php if (!empty($errors)) echo $_POST["field-message"] ?></textarea>
+                <textarea id="field-message" name="field-message" placeholder=" Mensagem" cols="39" rows="5" <?php if (isset($errors['message'])) { ?> class="alert" <?php } ?>><?php if (!empty($message)) echo $_POST["field-message"] ?></textarea>
                 <div>
                     <button name="botton-submit" id="botton-submit" class="botton-submit">Send</button>
                 </div>
