@@ -37,7 +37,6 @@ app.post(
     let i;
     for (i = 0; i < errors.errors.length; i++) {
       //allErrors.push(errors.errors[i].param);
-      console.log(allErrors);
       switch (errors.errors[i].param) {
         case "field-name":
           name = errors.errors[i].value;

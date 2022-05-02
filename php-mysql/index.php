@@ -1,11 +1,16 @@
 <?php
 
-use PHPMailer\PHPMailer\PHPMailer;
-
 require 'vendor/autoload.php';
+require_once 'conexao.php';
+
+function insert($pdo, $name, $email, $message, $visualized)
+{
+    $stm = $pdo->prepare("INSERT INTO contact_form ( name, email, message, visualized) VALUES (?, ?, ?, ?)");
+    $stm->execute([$name, $email, $message, $visualized]);
+    return $pdo->lastInsertId();
+};
 
 $requestMethod = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
-
 $success = isset($_GET['success']) ? ($_GET['success'] === '1') : false;
 
 if ($requestMethod === 'POST') {
@@ -13,43 +18,28 @@ if ($requestMethod === 'POST') {
     $name = isset($_POST['field-name']) ? trim($_POST['field-name']) : '';
     $email = isset($_POST['field-email']) ? trim($_POST['field-email']) : '';
     $message = isset($_POST['field-message']) ? trim($_POST['field-message']) : '';
-
+    $visualized = 0;
     $errors = [];
 
+    // a validaçao de cada campo
     if ($name === "") {
         // $errors[] é o mesmo que usar array_push($errors, '...') porém sem fazer uma chamada de função
         $errors['name'] = 'There was an error filling in the name';
     }
-
     if (!filter_var(trim($email), FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = 'There was an error filling in the email';
     }
-
     if ($message === "") {
         $errors['message'] = 'There was an error filling in the message';
     }
 
     if (empty($errors)) {
-        $from = $email;
-        $to = "dy@dyvaz.com";
-        $subject = "testando email php no mailhog";
-
-        $mail = new PHPMailer(true);
-        $mail->isSMTP();
-        $mail->Host       = "localhost";
-        $mail->Port       = 1025;
-        $mail->SMTPAuth = true;
-        $mail->setFrom($from, $name);
-        $mail->addAddress($to);
-        $mail->Subject = 'Testando Mailhog -php';
-        $mail->Body = $message;
-
-        try {
-            $mail->send();
+        $pdo = db_conection();
+        if ($pdo !== false && insert($pdo, $name, $email, $message, $visualized)) {
             header("Location: /?success=1");
             exit();
-        } catch (Exception $e) {
-            $errors[] = 'We had a server error, please try again later';
+        } else {
+            $errors[] = "Error establishing a database connection";
         }
     }
 }
@@ -62,17 +52,18 @@ if ($requestMethod === 'POST') {
     <meta charset="utf-8" />
 
     <link rel="stylesheet" type="text/css" href="style.css" />
-    <link rel="icon" href="img/icon-page.png" />
+    <link rel="icon" href="img/icon-page.png">
 </head>
 
 <body>
+    <p>PHP MYSQL</p>
     <div class="form-geral">
         <div>
             <div>
                 <div class="box-error">
                     <?php foreach ($errors as $value) { ?>
                         <div class="error-message">
-                            <img src="img/error.png" alt="icone de error" id="icone-error">
+                            <img src="/img/error.png" alt="icone de error" id="icone-error">
                             <p><?php echo $value; ?></p>
                         </div>
                     <?php } ?>
