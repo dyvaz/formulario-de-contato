@@ -56,7 +56,7 @@ if ($requestMethod === 'POST') {
 </head>
 
 <body>
-    <p>PHP MYSQL</p>
+
     <div class="form-geral">
         <div>
             <div>
