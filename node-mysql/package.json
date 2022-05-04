@@ -1,0 +1,17 @@
+{
+  "name": "form-node-mysql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "dyvaz",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.7",
+    "express": "^4.18.1",
+    "express-validator": "^6.14.0",
+    "mysql2": "^2.3.3"
+  }
+}

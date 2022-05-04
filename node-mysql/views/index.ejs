@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <title>Formulário de contato</title>
+  <meta charset="utf-8" />
+
+  <link rel="stylesheet" type="text/css" href="/style.css" />
+  <link rel="icon" href="/img/icon-page.png">
+</head>
+
+<body>
+  <h3>NODE MYSQL</h3>
+  <div class="form-geral">
+    <div>
+      <div>
+        <div id="caixa-erro">
+          <% for(let i=0; i < errors.length; i++) { %>
+            <div id="error-message">
+              <img src="/img/error.png" alt="icone de error" id="icone-error">
+              <p>
+                <%=errors[i]; %>
+              </p>
+            </div>
+            <% } %>
+        </div>
+        <div class="caixa-success">
+          <%if(errors.length==0 && sucesso){%>
+            <div id="sucesso-message">
+              <img src="/img/sucesso.png" alt="icone de sucesso" id="icone-sucesso">
+              <p>Message sent successfully, thanks for contacting us</p>
+            </div>
+            <% } %>
+        </div>
+      </div>
+      <form action="/" method="post">
+        <div>
+          <label for="field-name">
+            <img src="/img/icon.png" alt="icone de perfil" />
+          </label>
+          <input id="field-name" type="text" name="field-name" placeholder=" Name" value="<%= values.name %>"
+            <%if(errors.includes("field-name")){%> class="alert" <%}%> />
+        </div>
+        <div>
+          <label for="field-email">
+            <img src="/img/email.png" alt="icone de email" />
+          </label>
+          <input type="email" id="field-email" name="field-email" placeholder="  Email" value="<%= values.email %>"
+            <%if(errors.includes("field-email")){%> class="alert" <%}%> />
+        </div>
+
+        <label for="field message">
+          <img src="/img/escrita.png" alt="icone de escrita" />
+        </label>
+
+        <textarea name="field-message" id="field-message" placeholder=" Mensagem" cols="39" rows="5"
+          <%if(errors.includes("field-message")){%> class="alert" <%}%>/>
+<%= values.message %></textarea>
+        <div>
+          <button class="botton-submit">Send</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+
+</html>
