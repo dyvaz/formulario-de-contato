@@ -1,9 +1,9 @@
-const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
 const express = require("express");
 const { body, validationResult } = require("express-validator");
 const app = express();
 const port = 3001;
+const mysql = require("mysql2");
 app.use(express.static("../public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -32,6 +32,7 @@ app.post(
     let name = req.body["field-name"];
     let email = req.body["field-email"];
     let message = req.body["field-message"];
+    let visualized = false;
 
     let allErrors = [];
     let i;
@@ -61,30 +62,48 @@ app.post(
       return;
     }
 
-    const transport = nodemailer.createTransport({
+    //CONEXAO COM O BANCO DE DADOS
+    let connection = mysql.createConnection({
       host: "localhost",
-      port: 1025,
+      user: "Fm7ZKtSoYaBbXeZT5wGYAnZU4Uz979",
+      password: "WvPpZGiA8edUP7Qb77Q535JfZa36do",
+      database: "contact_form",
     });
 
-    const emailOptions = {
-      from: name + " " + email,
-      to: "dy@dyvaz.com",
-      subject: "Testando Mailhog",
-      text: message,
-    };
+    function insert(connection, callback) {
+      connection.query(
+        "INSERT INTO contact_form ( name, email, message, visualized) VALUES (?, ?, ?, ?)",
+        [name, email, message, visualized],
+        function (err, results) {
+          if (err) {
+            return callback(err);
+          }
+          callback(null, results.insertId);
+        }
+      );
+    }
 
-    transport.sendMail(emailOptions, (error, info) => {
-      if (error) {
-        allErrors = ["We had a server error, please try again later"];
-        res.render("index", {
-          errors: allErrors,
-          values,
-          errorServ: true,
-          sucesso: false,
-        });
+    connection.connect(function (err) {
+      if (err) {
+        console.error("error-conection: " + err);
         return;
       }
-      res.redirect("/?success=1");
+      insert(connection, function (err, lastInsertedId) {
+        connection.end();
+        if (err) {
+          allErrors = ["We had a server error, please try again later"];
+          res.render("index", {
+            errors: allErrors,
+            values,
+            errorServ: true,
+            sucesso: false,
+          });
+          console.error("error-conection: " + err);
+          return;
+        }
+        res.redirect("/?success=1");
+        console.log(lastInsertedId);
+      });
     });
   }
 );
