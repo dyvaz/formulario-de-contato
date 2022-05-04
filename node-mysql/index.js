@@ -4,6 +4,20 @@ const { body, validationResult } = require("express-validator");
 const app = express();
 const port = 3001;
 const mysql = require("mysql2");
+
+function insert(name, email, message, visualized, connection, callback) {
+  connection.query(
+    "INSERT INTO contact_form ( name, email, message, visualized) VALUES (?, ?, ?, ?)",
+    [name, email, message, visualized],
+    function (err, results) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null, results.insertId);
+    }
+  );
+}
+
 app.use(express.static("../public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -37,7 +51,6 @@ app.post(
     let allErrors = [];
     let i;
     for (i = 0; i < errors.errors.length; i++) {
-      //allErrors.push(errors.errors[i].param);
       switch (errors.errors[i].param) {
         case "field-name":
           name = errors.errors[i].value;
@@ -70,28 +83,22 @@ app.post(
       database: "contact_form",
     });
 
-    function insert(connection, callback) {
-      connection.query(
-        "INSERT INTO contact_form ( name, email, message, visualized) VALUES (?, ?, ?, ?)",
-        [name, email, message, visualized],
-        function (err, results) {
-          if (err) {
-            return callback(err);
-          }
-          callback(null, results.insertId);
-        }
-      );
-    }
-
     connection.connect(function (err) {
       if (err) {
+        allErrors = ["Error establishing a database connection"];
+        res.render("index", {
+          errors: allErrors,
+          values,
+          errorServ: true,
+          sucesso: false,
+        });
         console.error("error-conection: " + err);
         return;
       }
-      insert(connection, function (err, lastInsertedId) {
+      insert(name, email, message, visualized, connection, function (err) {
         connection.end();
         if (err) {
-          allErrors = ["We had a server error, please try again later"];
+          allErrors = ["Error inserting into database"];
           res.render("index", {
             errors: allErrors,
             values,
@@ -102,7 +109,6 @@ app.post(
           return;
         }
         res.redirect("/?success=1");
-        console.log(lastInsertedId);
       });
     });
   }
