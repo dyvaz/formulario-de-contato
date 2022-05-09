@@ -3,19 +3,26 @@ const express = require("express");
 const { body, validationResult } = require("express-validator");
 const app = express();
 const port = 3001;
-const mysql = require("mysql2");
+const mysql = require("mysql2/promise");
 
-function insert(name, email, message, visualized, connection, callback) {
-  connection.query(
-    "INSERT INTO contact_form ( name, email, message, visualized) VALUES (?, ?, ?, ?)",
-    [name, email, message, visualized],
-    function (err, results) {
-      if (err) {
-        return callback(err);
-      }
-      callback(null, results.insertId);
+async function withDatabaseConnection(fn) {
+  let connection,
+    connected = false;
+  try {
+    connection = await mysql.createConnection({
+      host: "localhost",
+      user: "Fm7ZKtSoYaBbXeZT5wGYAnZU4Uz979",
+      password: "WvPpZGiA8edUP7Qb77Q535JfZa36do",
+      database: "contact_form",
+    });
+    await connection.connect();
+    connected = true;
+    return await fn(connection);
+  } finally {
+    if (connection && connected) {
+      await connection.end();
     }
-  );
+  }
 }
 
 app.use(express.static("../public"));
@@ -31,23 +38,19 @@ app.get("/", (req, res, next) => {
     sucesso: req.query.success === "1" ? true : false,
   });
 });
-
 app.post(
   "/",
   body("field-name").trim().notEmpty(),
   body("field-email").trim().isEmail(),
   body("field-message").trim().notEmpty(),
-  (req, res, next) => {
+  async (req, res) => {
     const errors = validationResult(req);
-
     let errorServ = false;
     let sucesso = req.query.success === "1" ? true : false;
-
     let name = req.body["field-name"];
     let email = req.body["field-email"];
     let message = req.body["field-message"];
     let visualized = false;
-
     let allErrors = [];
     let i;
     for (i = 0; i < errors.errors.length; i++) {
@@ -74,43 +77,25 @@ app.post(
       res.render("index", { errors: allErrors, values, errorServ, sucesso });
       return;
     }
-
-    //CONEXAO COM O BANCO DE DADOS
-    let connection = mysql.createConnection({
-      host: "localhost",
-      user: "Fm7ZKtSoYaBbXeZT5wGYAnZU4Uz979",
-      password: "WvPpZGiA8edUP7Qb77Q535JfZa36do",
-      database: "contact_form",
-    });
-
-    connection.connect(function (err) {
-      if (err) {
-        allErrors = ["Error establishing a database connection"];
-        res.render("index", {
-          errors: allErrors,
-          values,
-          errorServ: true,
-          sucesso: false,
-        });
-        console.error("error-conection: " + err);
-        return;
-      }
-      insert(name, email, message, visualized, connection, function (err) {
-        connection.end();
-        if (err) {
-          allErrors = ["Error inserting into database"];
-          res.render("index", {
-            errors: allErrors,
-            values,
-            errorServ: true,
-            sucesso: false,
-          });
-          console.error("error-conection: " + err);
-          return;
-        }
-        res.redirect("/?success=1");
+    try {
+      await withDatabaseConnection((connection) =>
+        connection.query(
+          "INSERT INTO contact_form ( name, email, message, visualized) VALUES (?, ?, ?, ?)",
+          [name, email, message, visualized]
+        )
+      );
+      res.redirect("/?success=1");
+    } catch (err) {
+      console.log("cath");
+      allErrors = ["Error establishing a database connection"];
+      res.render("index", {
+        errors: allErrors,
+        values,
+        errorServ: true,
+        sucesso: false,
       });
-    });
+      console.error("error: " + err.message);
+    }
   }
 );
 
