@@ -9,12 +9,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set("view engine", "ejs");
 
-app.get("/", (req, res, next) => {
+app.get("/", (req, res) => {
   res.render("index", {
     errors: [],
     values: { name: "", email: "", message: "" },
     errorServ: false,
-    sucesso: req.query.success === "1" ? true : false,
+    success: req.query.success === "1" ? true : false,
   });
 });
 
@@ -23,11 +23,11 @@ app.post(
   body("field-name").trim().notEmpty(),
   body("field-email").trim().isEmail(),
   body("field-message").trim().notEmpty(),
-  (req, res, next) => {
+  (req, res) => {
     const errors = validationResult(req);
 
     let errorServ = false;
-    let sucesso = req.query.success === "1" ? true : false;
+    let success = req.query.success === "1" ? true : false;
 
     let name = req.body["field-name"];
     let email = req.body["field-email"];
@@ -36,7 +36,6 @@ app.post(
     let allErrors = [];
     let i;
     for (i = 0; i < errors.errors.length; i++) {
-      //allErrors.push(errors.errors[i].param);
       switch (errors.errors[i].param) {
         case "field-name":
           name = errors.errors[i].value;
@@ -57,7 +56,7 @@ app.post(
     const values = { name, email, message };
 
     if (i > 0) {
-      res.render("index", { errors: allErrors, values, errorServ, sucesso });
+      res.render("index", { errors: allErrors, values, errorServ, success });
       return;
     }
 
@@ -69,7 +68,7 @@ app.post(
     const emailOptions = {
       from: name + " " + email,
       to: "dy@dyvaz.com",
-      subject: "Testando Mailhog",
+      subject: "Testing Mailhog",
       text: message,
     };
 
@@ -80,7 +79,7 @@ app.post(
           errors: allErrors,
           values,
           errorServ: true,
-          sucesso: false,
+          success: false,
         });
         return;
       }

@@ -57,29 +57,27 @@ textarea {
   border-radius: 10px;
 }
 
-#caixa-erro {
+
+#box-error {
+  margin-top: -40px;
   margin-bottom: 40px;
 }
 
-#caixa-erro {
-  margin-top: -40px;
-}
-
-#icone-error {
+#error-icon {
   background-color: rgb(206, 57, 57);
   border-radius: 50px;
   margin-top: 8px;
   margin-left: 10px;
   margin-right: 15px;
 }
-#icone-sucesso {
+#success-icon{
   margin-top: 20px;
   margin-left: 10px;
   background-color: rgb(72, 148, 65);
   border-radius: 50px;
 }
 
-#sucesso-message {
+#success-message {
   align-items: center;
   width: 430px;
   font-size: 18px;

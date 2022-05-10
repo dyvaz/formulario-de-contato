@@ -2,7 +2,7 @@
 <html lang="pt-br">
 
 <head>
-  <title>Formulário de contato</title>
+  <title>Contact Form</title>
   <meta charset="utf-8" />
 
   <link rel="stylesheet" type="text/css" href="style.css" />
@@ -44,17 +44,17 @@
         const qs = parseQueryString(window.location.search);
 
         if (qs.error === 0) {
-          alert("Sua mensagem foi enviada com sucesso");
+          alert("Your message has been sent successfully");
         } else {
           let arr = qs.error.split(",");
           if (arr.includes("field-name")) {
-            alert("Houve um erro no preenchimento do campo NOME");
+            alert("There was an error filling in the name field");
           }
           if (arr.includes("field-email")) {
-            alert("Houve um erro no preenchimento do campo EMAIL");
+            alert("There was an error filling in the email field");
           }
           if (arr.includes("field-message")) {
-            alert("Houve um erro no preenchimento do campo MESSAGE");
+            alert("There was an error filling in the message field");
           }
         }
       </script>
@@ -62,25 +62,25 @@
       <form action="/api/contact" method="post">
         <div>
           <label for="field-name">
-            <img src="img/icon.png" alt="icone de perfil" />
+            <img src="img/icon.png" alt="profile icon" />
           </label>
           <input id="field-name" type="text" name="field-name" placeholder="  Name" />
         </div>
         <div>
           <label for="field-email">
-            <img src="img/email.png" alt="icone de email" />
+            <img src="img/email.png" alt="email icon" />
           </label>
           <input type="email" id="field-email" name="field-email" placeholder="  Email" />
         </div>
 
         <label for="field-message">
-          <img src="img/escrita.png" alt="icone de escrita" />
+          <img src="img/escrita.png" alt="message icon" />
         </label>
 
-        <textarea name="field-message" id="field-message" class="field-message" placeholder=" Mensagem" cols="39"
+        <textarea name="field-message" id="field-message" class="field-message" placeholder=" Message" cols="39"
           rows="5"></textarea>
         <div>
-          <button class="botton-submit">Enviar</button>
+          <button class="botton-submit">Send</button>
         </div>
       </form>
     </div>

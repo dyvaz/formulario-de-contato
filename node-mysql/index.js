@@ -35,7 +35,7 @@ app.get("/", (req, res, next) => {
     errors: [],
     values: { name: "", email: "", message: "" },
     errorServ: false,
-    sucesso: req.query.success === "1" ? true : false,
+    success: req.query.success === "1" ? true : false,
   });
 });
 app.post(
@@ -46,7 +46,7 @@ app.post(
   async (req, res) => {
     const errors = validationResult(req);
     let errorServ = false;
-    let sucesso = req.query.success === "1" ? true : false;
+    let success = req.query.success === "1" ? true : false;
     let name = req.body["field-name"];
     let email = req.body["field-email"];
     let message = req.body["field-message"];
@@ -74,7 +74,7 @@ app.post(
     const values = { name, email, message };
 
     if (i > 0) {
-      res.render("index", { errors: allErrors, values, errorServ, sucesso });
+      res.render("index", { errors: allErrors, values, errorServ, success });
       return;
     }
     try {
@@ -92,7 +92,7 @@ app.post(
         errors: allErrors,
         values,
         errorServ: true,
-        sucesso: false,
+        success: false,
       });
       console.error("error: " + err.message);
     }

@@ -14,14 +14,14 @@ $requestMethod = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] 
 $success = isset($_GET['success']) ? ($_GET['success'] === '1') : false;
 
 if ($requestMethod === 'POST') {
-    //verificaçao da existencia das chaves, criando uma string vazia se nao existir
+    //verificação da existência das chaves, criando uma string vazia se não existir
     $name = isset($_POST['field-name']) ? trim($_POST['field-name']) : '';
     $email = isset($_POST['field-email']) ? trim($_POST['field-email']) : '';
     $message = isset($_POST['field-message']) ? trim($_POST['field-message']) : '';
     $visualized = 0;
     $errors = [];
 
-    // a validaçao de cada campo
+    // a validação de cada campo
     if ($name === "") {
         // $errors[] é o mesmo que usar array_push($errors, '...') porém sem fazer uma chamada de função
         $errors['name'] = 'There was an error filling in the name';
@@ -48,7 +48,7 @@ if ($requestMethod === 'POST') {
 <html lang="pt-br">
 
 <head>
-    <title>Formulário de contato</title>
+    <title>Contact Form</title>
     <meta charset="utf-8" />
 
     <link rel="stylesheet" type="text/css" href="style.css" />
@@ -63,13 +63,13 @@ if ($requestMethod === 'POST') {
                 <div class="box-error">
                     <?php foreach ($errors as $value) { ?>
                         <div class="error-message">
-                            <img src="/img/error.png" alt="icone de error" id="icone-error">
+                            <img src="/img/error.png" alt="error icon" id="error-icon">
                             <p><?php echo $value; ?></p>
                         </div>
                     <?php } ?>
                     <?php if ($success) { ?>
-                        <div class="sucesso-message">
-                            <img src="/img/sucesso.png" alt="icone de sucesso" id="icone-sucesso">
+                        <div class="success-message ">
+                            <img src="/img/success.png" alt="success icon" id="success-icon">
                             <p>Message sent successfully, thanks for contacting us</p>
                         </div>
                     <?php } ?>
@@ -78,7 +78,7 @@ if ($requestMethod === 'POST') {
             <form action="/" method="post">
                 <div>
                     <label for="field-name">
-                        <img src="img/icon.png" alt="icone de perfil" />
+                        <img src="img/icon.png" alt="profile icon" />
                     </label>
                     <input id="field-name" value="<?php if (!empty($name)) echo $_POST['field-name'] ?>" type="text" name="field-name" placeholder="  Name" <?php if (isset($errors['name'])) { ?> class="alert" <?php } ?> />
 
@@ -86,16 +86,16 @@ if ($requestMethod === 'POST') {
                 </div>
                 <div>
                     <label for=" field-email">
-                        <img src="img/email.png" alt="icone de email" />
+                        <img src="img/email.png" alt="email icon" />
                     </label>
                     <input id="field-email" value="<?php if (!empty($email)) echo $_POST['field-email'] ?>" type="email" name="field-email" placeholder="  Email" <?php if (isset($errors['email'])) { ?> class="alert" <?php } ?> />
                 </div>
 
                 <label for="field-message">
-                    <img src="img/escrita.png" alt="icone de escrita" />
+                    <img src="img/message.png" alt="message icon" />
                 </label>
 
-                <textarea id="field-message" name="field-message" placeholder=" Mensagem" cols="39" rows="5" <?php if (isset($errors['message'])) { ?> class="alert" <?php } ?>><?php if (!empty($message)) echo $_POST["field-message"] ?></textarea>
+                <textarea id="field-message" name="field-message" placeholder=" Message" cols="39" rows="5" <?php if (isset($errors['message'])) { ?> class="alert" <?php } ?>><?php if (!empty($message)) echo $_POST["field-message"] ?></textarea>
                 <div>
                     <button name="botton-submit" id="botton-submit" class="botton-submit">Send</button>
                 </div>

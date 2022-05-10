@@ -62,14 +62,14 @@ textarea {
   margin-bottom: 40px;
 }
 
-#icone-error {
+#error-icon {
   background-color: rgb(206, 57, 57);
   border-radius: 50px;
   margin-top: 8px;
   margin-left: 10px;
   margin-right: 10px;
 }
-#icone-sucesso {
+#success-icon {
   margin-top: 20px;
   margin-left: 10px;
   margin-right: 10px;
@@ -77,7 +77,7 @@ textarea {
   border-radius: 50px;
 }
 
-.sucesso-message {
+.sucess-message {
   align-items: center;
   width: 430px;
   font-size: 18px;
