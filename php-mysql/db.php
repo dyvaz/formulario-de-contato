@@ -12,3 +12,10 @@ function db_conection()
         return false;
     }
 }
+
+function insert($pdo, $name, $email, $message, $visualized)
+{
+    $stm = $pdo->prepare("INSERT INTO contact_form ( name, email, message, visualized) VALUES (?, ?, ?, ?)");
+    $stm->execute([$name, $email, $message, $visualized]);
+    return $pdo->lastInsertId();
+};

@@ -1,14 +1,7 @@
 <?php
 
 require 'vendor/autoload.php';
-require_once 'conexao.php';
-
-function insert($pdo, $name, $email, $message, $visualized)
-{
-    $stm = $pdo->prepare("INSERT INTO contact_form ( name, email, message, visualized) VALUES (?, ?, ?, ?)");
-    $stm->execute([$name, $email, $message, $visualized]);
-    return $pdo->lastInsertId();
-};
+require_once 'db.php';
 
 $requestMethod = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
 $success = isset($_GET['success']) ? ($_GET['success'] === '1') : false;
