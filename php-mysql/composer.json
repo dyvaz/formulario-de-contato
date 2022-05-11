@@ -8,8 +8,6 @@
         }
     ],
     "require": {
-        
-
     },
     "require-dev": {
         "overtrue/phplint": "^3.0"
