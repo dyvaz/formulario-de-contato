@@ -14,22 +14,23 @@
     <div>
       <div>
         <div id="box-error">
-          <% for(let i=0; i < errors.length; i++) { %>
-            <div id="error-message">
-              <img src="/img/error.png" alt="error icon" id="error-icon">
-              <p>
-                <%=errors[i]; %>
-              </p>
-            </div>
-            <% } %>
+          <% for     
+          (let i=0; i < errors.length; i++) { %>
+          <div id="error-message">
+            <img src="/img/error.png" alt="error icon" id="error-icon">
+            <p>
+              <%=errors[i]; %>
+            </p>
+          </div>
+          <% } %>
         </div>
         <div class="caixa-success">
           <%if(errors.length==0 && success){%>
-            <div id="success-message">
-              <img src="/img/success.png" alt="success icon" id="success-icon">
-              <p>Message sent successfully, thanks for contacting us</p>
-            </div>
-            <% } %>
+          <div id="success-message">
+            <img src="/img/success.png" alt="success icon" id="success-icon">
+            <p>Message sent successfully, thanks for contacting us</p>
+          </div>
+          <% } %>
         </div>
       </div>
       <form action="/" method="post">
@@ -55,9 +56,9 @@
         <textarea name="field-message" id="field-message" placeholder=" Message" cols="39" rows="5"
           <%if(errors.includes("field-message")){%> class="alert" <%}%>/>
 <%= values.message %></textarea>
-        <div>
-          <button class="botton-submit">Send</button>
-        </div>
+          <div>
+            <button class="botton-submit">Send</button>
+          </div>
       </form>
     </div>
   </div>

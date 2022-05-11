@@ -11,7 +11,8 @@
         "phpmailer/phpmailer": "^6.6"
 
 
+    },
+    "require-dev": {
+        "overtrue/phplint": "^3.0"
     }
-    
-    
 }

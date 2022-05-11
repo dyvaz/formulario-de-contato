@@ -72,7 +72,7 @@ app.post(
       text: message,
     };
 
-    transport.sendMail(emailOptions, (error, info) => {
+    transport.sendMail(emailOptions, (error) => {
       if (error) {
         allErrors = ["We had a server error, please try again later"];
         res.render("index", {
