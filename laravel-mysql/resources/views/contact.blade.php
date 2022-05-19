@@ -6,8 +6,6 @@
     <title>Contact Form</title>
 </head>
 
-
-
 <link rel="stylesheet" href='/css/style.css' type="text/css" />
 <link rel="icon" href="/img/icon-page.png">
 
@@ -23,6 +21,7 @@
                         <p>{{ $error }}</p>
                     </div>
                     @endforeach
+
                     @endif
                     @if(session('mensagem'))
                     <div class="success-message">
@@ -37,21 +36,20 @@
                     <label for="name">
                         <img src="/img/icon.png" alt="icon">
                     </label>
-                    <input type="text" name="name" id="name" placeholder="Name" value="{{old('name')}}">
-                </div>
+                    <input type="text" name="name" id="name" placeholder="Name" value="{{old('name')}}" @if($errors and $errors->has('name'))class="alert" @endif>
 
+                </div>
                 <div>
                     <label for="email">
                         <img src="img/email.png" alt="email icon" />
                     </label>
-                    <input type="text" name="email" id="email" placeholder="Email" value="{{old('email')}}">
+                    <input type="text" name="email" id="email" placeholder="Email" value="{{old('email')}}" @if($errors and $errors->has('email'))class="alert" @endif>
                 </div>
-
                 <div>
                     <label for="message">
                         <img src="img/message.png" alt="message icon" />
                     </label>
-                    <textarea type="text" name="message" id="message" placeholder="Message" cols="40" rows="5">{{old('message')}}</textarea>
+                    <textarea type="text" name="message" id="message" placeholder="Message" cols="40" rows="5" @if($errors and $errors->has('message'))class="alert" @endif>{{old('message')}}</textarea>
                 </div>
 
                 <button name="botton-submit" id="botton-submit" class="botton-submit" type="submit">Send</button>

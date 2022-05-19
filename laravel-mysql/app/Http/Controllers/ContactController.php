@@ -11,7 +11,6 @@ class ContactController extends Controller
 {
     public function contact(Request $request)
     {
-
         if ($request->isMethod('POST')) {
             $validated = $request->validate([
                 'name' => 'required|string',
@@ -20,12 +19,12 @@ class ContactController extends Controller
             ]);
             try {
                 Contact::create($validated);
-                return redirect('/contact')->with('mensagem', "Mensagem enviada com sucesso");
+                return redirect('/contact')->with('mensagem', "Message sent successfully, thanks for contacting us");
             } catch (Exception $e) {
-                return redirect('/contact')->withErrors(['Não foi possível enviar sua mensagem']);
+                error_log($e->__toString());
+                return redirect('/contact')->withErrors(['It was not possible to send your message'])->withInput();
             }
         }
-
         return view('contact');
     }
 }
